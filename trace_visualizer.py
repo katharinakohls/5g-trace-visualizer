@@ -1566,12 +1566,12 @@ def call_wireshark_for_one_version(wireshark_version, input_file_str, http2ports
         tshark_path = os.path.join('tshark')
     else:
         tshark_path = os.path.join(get_wireshark_portable_folder(wireshark_version), 'tshark')
-    logging.debug('tshark path: {0}'.format(tshark_path))
+        # Add folder check to make more understandable error messages
+        tshark_folder = get_wireshark_portable_folder(wireshark_version)
+        if not os.path.isdir(tshark_folder):
+            raise FileNotFoundError('Could not find tshark on path {0}'.format(tshark_path))
 
-    # Add folder check to make more understandable error messages
-    tshark_folder = get_wireshark_portable_folder(wireshark_version)
-    if not os.path.isdir(tshark_folder):
-        raise FileNotFoundError('Could not find tshark on path {0}'.format(tshark_path))
+    logging.debug('tshark path: {0}'.format(tshark_path))
 
     if not merged:
         output_file = '{0}_{1}.pdml'.format(filename, wireshark_version)
